@@ -1,0 +1,52 @@
+name: FellesVarsling
+version: ${project.version}
+authors: [Baktus_79]
+main: no.vestlandetmc.fv.bukkit.FVBukkit
+description: Felles varslingssystem for Norske servere.
+website: www.vestlandetmc.no
+prefix: FellesVarsling
+api-version: 1.13
+softdepend: [LiteBans]
+commands:
+  fellesvarsling:
+    description: Send en forespørsel til en annen spiller om å få se hvor mye penger en har.
+    usage: /<command>
+    aliases:
+    - fv
+    - varsling
+    - varsle
+    permission: fellesvarsling.bruk
+    permission-message: §cBeklager, men du har ikke tillatelse til å bruke denne kommandoen.
+permissions:
+  fellesvarsling.admin:
+    description: Få tilgang til alt
+    default: op
+    children:
+      fellesvarsling.mod: true
+      fellesvarsling.slett: true
+      fellesvarsling.reload: true
+  fellesvarsling.mod:
+    default: op
+    children:
+      fellesvarsling.bruk: true
+      fellesvarsling.varsel: true
+      fellesvarsling.lookup: true
+      fellesvarsling.add: true
+  fellesvarsling.bruk:
+    description: Få tilgang til /fellesvarsling
+    default: op
+  fellesvarsling.varsel:
+    description: Få varsler fra registrerte spillere
+    default: op
+  fellesvarsling.lookup:
+    description: Få tilgang til /fellesvarsling lookup
+    default: op
+  fellesvarsling.slett:
+    description: Få tilgang til /fellesvarsling slett
+    default: op
+  fellesvarsling.add:
+    description: Få tilgang til /fellesvarsling add
+    default: op
+  fellesvarsling.reload:
+    description: Få tilgang til /fellesvarsling add
+    default: op

@@ -1,0 +1,20 @@
+mysql:
+  host: localhost
+  port: 3306
+  user: root
+  password: minecraft
+  database: Minecraft
+  enable-ssl: false
+servername: Vestlandet
+filter:
+  blacklist: true
+  wordfilter:
+  - test
+tilkoblinger:
+  litebans:
+    enable: true
+    type:
+      ban: true
+      kick: false
+      mute: false
+      warn: false 
