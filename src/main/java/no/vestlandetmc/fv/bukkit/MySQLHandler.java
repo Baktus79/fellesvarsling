@@ -126,8 +126,8 @@ public class MySQLHandler {
 		final long unixTime = System.currentTimeMillis() / 1000L;
 		int i = 1;
 
-		if(player == null) { MessageHandler.sendConsole("&e--- ==== &6Varslinger - " + user + "&e==== ---"); }
-		else { MessageHandler.sendMessage(player, "&e--- ==== &6Varslinger - " + user + "&e==== ---"); }
+		if(player == null) { MessageHandler.sendConsole("&e--- ==== &6Varslinger - " + user + " &e==== ---"); }
+		else { MessageHandler.sendMessage(player, "&e--- ==== &6Varslinger - " + user + " &e==== ---"); }
 
 		while (set.next()) {
 			final int id = set.getInt("id");
