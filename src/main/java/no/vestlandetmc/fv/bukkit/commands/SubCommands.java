@@ -142,11 +142,32 @@ public class SubCommands {
 			}
 		}
 
-		final String[] message = new String[] { "&eKonfigurasjonsfilen er lastet om på nytt.", "&eMySQL endringer vil ikke tas i bruk før restart." };
+		final String message = "&eKonfigurasjonsfilen er lastet om på nytt.";
+
+		final String sqlEnabled = "&eMySQL: &8[&aAktivert&8]";
+		final String sqlDisable = "&eMySQL: &8[&cDeaktivert&8]";
+		final String sqlSS = Config.ENABLE_SSL ? "&eMySQL SSL: &8[&aAktivert&8]" : "&eMySQL SSL: &8[&cDeaktivert&8]";
+		final String litebans = Config.LITEBANS_ENABLE ? "&eLitebans: &8[&aAktivert&8]" : "&eLitebans: &8[&cDeaktivert&8]";
+
 		Config.initialize();
 
 		if(!isConsole) { MessageHandler.sendMessage(player, message); }
 		else { MessageHandler.sendConsole(message); }
+
+		if(new MySQLHandler().initialize()) {
+			if(!isConsole) { MessageHandler.sendMessage(player, sqlEnabled); }
+			else { MessageHandler.sendConsole(sqlEnabled); }
+
+			if(!isConsole) { MessageHandler.sendMessage(player, sqlSS); }
+			else { MessageHandler.sendConsole(sqlSS); }
+		} else {
+			if(!isConsole) { MessageHandler.sendMessage(player, sqlDisable); }
+			else { MessageHandler.sendConsole(sqlDisable); }
+		}
+
+		if(!isConsole) { MessageHandler.sendMessage(player, litebans); }
+		else { MessageHandler.sendConsole(litebans); }
+
 	}
 
 	public void slett(String[] args) {
