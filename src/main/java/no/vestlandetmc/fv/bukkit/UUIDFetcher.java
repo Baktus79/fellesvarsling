@@ -85,8 +85,12 @@ public class UUIDFetcher {
 			connection.setReadTimeout(5000);
 			final UUIDFetcher data = gson.fromJson(new BufferedReader(new InputStreamReader(connection.getInputStream())), UUIDFetcher.class);
 
-			uuidCache.put(name, data.id);
-			nameCache.put(data.id, data.name);
+			try {
+				uuidCache.put(name, data.id);
+				nameCache.put(data.id, data.name);
+			} catch (final NullPointerException e) {
+				return null;
+			}
 
 			return data.id;
 		} catch (final Exception e) {
