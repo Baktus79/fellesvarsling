@@ -14,6 +14,7 @@ import no.vestlandetmc.fv.bukkit.config.Config;
 
 public class MySQLHandler {
 
+	public static boolean sqlEnabled = false;
 	private Connection connection;
 
 	private Connection getNewConnection() {

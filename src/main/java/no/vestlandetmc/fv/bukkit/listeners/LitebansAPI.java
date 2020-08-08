@@ -24,6 +24,7 @@ public class LitebansAPI {
 				final long expire = e.getDateEnd();
 				final String reason = e.getReason();
 
+				if(!MySQLHandler.sqlEnabled) { return; }
 				if(!entryType(type)) { return; }
 				if(filter(reason)) { return; }
 

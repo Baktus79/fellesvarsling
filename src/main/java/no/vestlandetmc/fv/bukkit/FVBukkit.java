@@ -1,6 +1,5 @@
 package no.vestlandetmc.fv.bukkit;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import no.vestlandetmc.fv.bukkit.commands.FellesVarsling;
@@ -21,7 +20,6 @@ public class FVBukkit extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 
-		this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 		this.getCommand("fellesvarsling").setExecutor(new FellesVarsling());
 		this.getCommand("fellesvarsling").setTabCompleter(new TabComplete());
 		Config.initialize();
@@ -30,10 +28,11 @@ public class FVBukkit extends JavaPlugin {
 
 		if(new MySQLHandler().initialize()) {
 			MessageHandler.sendConsole("[" + getDescription().getPrefix() + "] Kontakt med database er oppnådd");
+			this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+			MySQLHandler.sqlEnabled = true;
 		} else {
 			MessageHandler.sendConsole("[" + getDescription().getPrefix() + "] Kontakt med database feilet");
-			Bukkit.getPluginManager().disablePlugin(this);
-			return;
+			MySQLHandler.sqlEnabled = false;
 		}
 
 		if(getServer().getPluginManager().getPlugin("Litebans") != null) {

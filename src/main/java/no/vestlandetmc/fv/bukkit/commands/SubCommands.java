@@ -18,6 +18,7 @@ public class SubCommands {
 	private final boolean isConsole;
 	private Player player;
 	private final MySQLHandler sql = new MySQLHandler();
+	private final String sqlMessage = "&cMySQL er ikke aktivert. Aktiver MySQL før du bruker denne kommandoen.";
 
 	public SubCommands(CommandSender sender) {
 		if(!(sender instanceof Player)) { this.isConsole = true; }
@@ -28,6 +29,12 @@ public class SubCommands {
 	}
 
 	public void add(String[] args) {
+		if(!MySQLHandler.sqlEnabled) {
+			if(!isConsole) { MessageHandler.sendMessage(player, sqlMessage); }
+			else { MessageHandler.sendConsole(sqlMessage); }
+			return;
+		}
+
 		if(!isConsole) {
 			if(!this.player.hasPermission("fellesvarsling.add")) {
 				MessageHandler.sendMessage(this.player, "&cBeklager, men du har ikke tillatelse til å bruke denne kommandoen.");
@@ -96,6 +103,12 @@ public class SubCommands {
 	}
 
 	public void lookup(String[] args) {
+		if(!MySQLHandler.sqlEnabled) {
+			if(!isConsole) { MessageHandler.sendMessage(player, sqlMessage); }
+			else { MessageHandler.sendConsole(sqlMessage); }
+			return;
+		}
+
 		if(!isConsole) {
 			if(!this.player.hasPermission("fellesvarsling.lookup")) {
 				MessageHandler.sendMessage(this.player, "&cBeklager, men du har ikke tillatelse til å bruke denne kommandoen.");
@@ -160,9 +173,14 @@ public class SubCommands {
 
 			if(!isConsole) { MessageHandler.sendMessage(player, sqlSS); }
 			else { MessageHandler.sendConsole(sqlSS); }
+
+			MySQLHandler.sqlEnabled = true;
 		} else {
 			if(!isConsole) { MessageHandler.sendMessage(player, sqlDisable); }
-			else { MessageHandler.sendConsole(sqlDisable); }
+			else {
+				MySQLHandler.sqlEnabled = false;
+				MessageHandler.sendConsole(sqlDisable);
+			}
 		}
 
 		if(!isConsole) { MessageHandler.sendMessage(player, litebans); }
@@ -171,6 +189,12 @@ public class SubCommands {
 	}
 
 	public void slett(String[] args) {
+		if(!MySQLHandler.sqlEnabled) {
+			if(!isConsole) { MessageHandler.sendMessage(player, sqlMessage); }
+			else { MessageHandler.sendConsole(sqlMessage); }
+			return;
+		}
+
 		if(!isConsole) {
 			if(!this.player.hasPermission("fellesvarsling.slett")) {
 				MessageHandler.sendMessage(this.player, "&cBeklager, men du har ikke tillatelse til å bruke denne kommandoen.");
@@ -242,6 +266,5 @@ public class SubCommands {
 	private int convertToInt(String str) {
 		return Integer.valueOf(str);
 	}
-
 
 }
