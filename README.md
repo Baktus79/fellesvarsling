@@ -14,11 +14,10 @@ Om du har funnet systemfeil så kan du rapportere dette på [Issues](https://git
 * Registrer varsling automatisk ved en Liteban handling
 * Registrere varslinger manuelt
 * Støtter kun MySQL
-* BungeeCord støtte *(Kommer snart)*
+* BungeeCord støtte
 * Varsling blir sendt automatisk til utvalgte stab medlemmer når spilleren logger på
 * Søk etter varslinger ved hjelp av spillernavn
 * Slett varslinger
-* Sette varighet på lagring av data *(Kommer snart)*
 
 ## Vi står bak utviklingen
 * Vestlandet MC - [Discord](https://discord.gg/9jFdUaD) [Nettside](https://www.vestlandetmc.no)
