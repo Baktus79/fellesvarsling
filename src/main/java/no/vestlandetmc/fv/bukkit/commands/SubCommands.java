@@ -88,7 +88,7 @@ public class SubCommands {
 					"&6/fv slett &f[id] - &eSlett oppføring på spiller.",
 					"&6/fv hjelp &f- &eSe denne hjelpesiden.",
 					"&6/fv add &f[spiller] [årsak] - &eLegg til en varsling på spiller.",
-					"&6/fv reload &f- &eLast om de fleste konfigurasjoner. (MySQL krever omstart)");
+					"&6/fv reload &f- &eLast om konfigurasjonsfilen.");
 		}
 
 		else {
@@ -98,7 +98,7 @@ public class SubCommands {
 					"&6/fv slett &f[id] - &eSlett oppføring på spiller.",
 					"&6/fv hjelp &f- &eSe denne hjelpesiden.",
 					"&6/fv add &f[spiller] [årsak] - &eLegg til en varsling på spiller.",
-					"&6/fv reload &f- &eLast om de fleste konfigurasjoner. (MySQL krever omstart)");
+					"&6/fv reload &f- &eLast om konfigurasjonsfilen.");
 		}
 	}
 
