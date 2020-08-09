@@ -2,138 +2,86 @@ package no.vestlandetmc.fv.bungee;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.function.Consumer;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.mojang.util.UUIDTypeAdapter;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class UUIDFetcher {
+/**
+ * Helper-class for getting UUIDs of players.
+ */
+public final class UUIDFetcher {
 
-	/**
-	 * Date when name changes were introduced
-	 * @see UUIDFetcher#getUUIDAt(String, long)
-	 */
-	public static final long FEBRUARY_2015 = 1422748800000L;
-
-
-	private static Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
-
-	private static final String UUID_URL = "https://api.mojang.com/users/profiles/minecraft/%s?at=%d";
-	private static final String NAME_URL = "https://api.mojang.com/user/profiles/%s/names";
-
-	private static Map<String, UUID> uuidCache = new HashMap<>();
-	private static Map<UUID, String> nameCache = new HashMap<>();
-
-	private static ExecutorService pool = Executors.newCachedThreadPool();
-
-	private String name;
-	private UUID id;
-
-	/**
-	 * Fetches the uuid asynchronously and passes it to the consumer
-	 *
-	 * @param name The name
-	 * @param action Do what you want to do with the uuid her
-	 */
-	public static void getUUID(String name, Consumer<UUID> action) {
-		pool.execute(() -> action.accept(getUUID(name)));
+	private UUIDFetcher() {
+		throw new UnsupportedOperationException();
 	}
 
 	/**
-	 * Fetches the uuid synchronously and returns it
+	 * Returns the UUID of the searched player.
 	 *
-	 * @param name The name
-	 * @return The uuid
+	 * @param player The player.
+	 * @return The UUID of the given player.
 	 */
-	public static UUID getUUID(String name) {
-		return getUUIDAt(name, System.currentTimeMillis());
+	public static UUID getUUID(ProxiedPlayer player) {
+		return getUUID(player.getName());
 	}
 
 	/**
-	 * Fetches the uuid synchronously for a specified name and time and passes the result to the consumer
+	 * Returns the UUID of the searched player.
 	 *
-	 * @param name The name
-	 * @param timestamp Time when the player had this name in milliseconds
-	 * @param action Do what you want to do with the uuid her
+	 * @param playername The name of the player.
+	 * @return The UUID of the given player.
+	 * @throws ParseException
 	 */
-	public static void getUUIDAt(String name, long timestamp, Consumer<UUID> action) {
-		pool.execute(() -> action.accept(getUUIDAt(name, timestamp)));
-	}
-
-	/**
-	 * Fetches the uuid synchronously for a specified name and time
-	 *
-	 * @param name The name
-	 * @param timestamp Time when the player had this name in milliseconds
-	 * @see UUIDFetcher#FEBRUARY_2015
-	 */
-	public static UUID getUUIDAt(String name, long timestamp) {
-		name = name.toLowerCase();
-		if (uuidCache.containsKey(name)) {
-			return uuidCache.get(name);
-		}
-		try {
-			final HttpURLConnection connection = (HttpURLConnection) new URL(String.format(UUID_URL, name, timestamp/1000)).openConnection();
-			connection.setReadTimeout(5000);
-			final UUIDFetcher data = gson.fromJson(new BufferedReader(new InputStreamReader(connection.getInputStream())), UUIDFetcher.class);
-
-			try {
-				uuidCache.put(name, data.id);
-				nameCache.put(data.id, data.name);
-			} catch (final NullPointerException e) {
-				return null;
+	public static UUID getUUID(String playername) {
+		final String output = callURL("https://api.mojang.com/users/profiles" + "/minecraft/" + playername);
+		final String u = readData(output);
+		String uuid = "";
+		for (int i = 0; i <= 31; i++) {
+			uuid = uuid + u.charAt(i);
+			if (i == 7 || i == 11 || i == 15 || i == 19) {
+				uuid = uuid + "-";
 			}
-
-			return data.id;
-		} catch (final Exception e) {
-			e.printStackTrace();
 		}
-
-		return null;
+		return UUID.fromString(uuid);
 	}
 
-	/**
-	 * Fetches the name asynchronously and passes it to the consumer
-	 *
-	 * @param uuid The uuid
-	 * @param action Do what you want to do with the name her
-	 */
-	public static void getName(UUID uuid, Consumer<String> action) {
-		pool.execute(() -> action.accept(getName(uuid)));
+	private static String readData(String toRead) {
+		final String[] parts = toRead.split(":");
+		final String[] uuid = parts[2].split("}");
+
+		return uuid[0].replaceAll("\"", "");
 	}
 
-	/**
-	 * Fetches the name synchronously and returns it
-	 *
-	 * @param uuid The uuid
-	 * @return The name
-	 */
-	public static String getName(UUID uuid) {
-		if (nameCache.containsKey(uuid)) {
-			return nameCache.get(uuid);
-		}
+	private static String callURL(String urlStr) {
+		final StringBuilder sb = new StringBuilder();
+		URLConnection urlConn = null;
+		InputStreamReader in = null;
 		try {
-			final HttpURLConnection connection = (HttpURLConnection) new URL(String.format(NAME_URL, UUIDTypeAdapter.fromUUID(uuid))).openConnection();
-			connection.setReadTimeout(5000);
-			final UUIDFetcher[] nameHistory = gson.fromJson(new BufferedReader(new InputStreamReader(connection.getInputStream())), UUIDFetcher[].class);
-			final UUIDFetcher currentNameData = nameHistory[nameHistory.length - 1];
-
-			uuidCache.put(currentNameData.name.toLowerCase(), uuid);
-			nameCache.put(uuid, currentNameData.name);
-
-			return currentNameData.name;
+			final URL url = new URL(urlStr);
+			urlConn = url.openConnection();
+			if (urlConn != null) {
+				urlConn.setReadTimeout(60 * 1000);
+			}
+			if (urlConn != null && urlConn.getInputStream() != null) {
+				in = new InputStreamReader(urlConn.getInputStream(),
+						Charset.defaultCharset());
+				final BufferedReader bufferedReader = new BufferedReader(in);
+				if (bufferedReader != null) {
+					int cp;
+					while ((cp = bufferedReader.read()) != -1) {
+						sb.append((char) cp);
+					}
+					bufferedReader.close();
+				}
+			}
+			in.close();
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-
-		return null;
+		return sb.toString();
 	}
+
 }
