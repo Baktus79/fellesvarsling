@@ -22,7 +22,6 @@ public class Config {
 			plugin.getDataFolder().mkdir();
 
 		final File file = new File(plugin.getDataFolder(), fileName);
-		this.config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
 
 		if (!file.exists()) {
 			try (InputStream in = plugin.getResourceAsStream(fileName)) {
@@ -31,6 +30,8 @@ public class Config {
 				e.printStackTrace();
 			}
 		}
+
+		this.config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
 	}
 
 	public static List<String>

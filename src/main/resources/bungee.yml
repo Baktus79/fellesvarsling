@@ -2,3 +2,4 @@ name: FellesVarsling
 main: no.vestlandetmc.fv.bungee.FVBungee
 version: ${project.version}
 author: Baktus_79
+softDepends: [LiteBans]

@@ -118,13 +118,13 @@ public class MySQLHandler {
 		final PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, uuid.toString());
 
-		final String user = UUIDFetcher.getName(uuid);
+		final String user = NameFetcher.getName(uuid);
 		final ResultSet set = statement.executeQuery();
 		final long unixTime = System.currentTimeMillis() / 1000L;
 		int i = 1;
 
-		if(player == null) { MessageHandler.sendConsole("&e--- ==== &6Varslinger - " + user + " &e==== ---"); }
-		else { MessageHandler.sendMessage(player, "&e--- ==== &6Varslinger - " + user + " &e==== ---"); }
+		if(player == null) { MessageHandler.sendConsole("&e--- ==== &6Varslinger -" + user + " &e==== ---"); }
+		else { MessageHandler.sendMessage(player, "&e--- ==== &6Varslinger -" + user + " &e==== ---"); }
 
 		while (set.next()) {
 			final int id = set.getInt("id");
