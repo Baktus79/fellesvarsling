@@ -10,6 +10,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import no.vestlandetmc.fv.bungee.FVBungee;
 import no.vestlandetmc.fv.bungee.MessageHandler;
 import no.vestlandetmc.fv.bungee.MySQLHandler;
+import no.vestlandetmc.fv.bungee.NameFetcher;
+import no.vestlandetmc.fv.bungee.Permissions;
 import no.vestlandetmc.fv.bungee.UUIDFetcher;
 import no.vestlandetmc.fv.bungee.config.Config;
 
@@ -36,7 +38,9 @@ public class SubCommands {
 		}
 
 		if(!isConsole) {
-			if(!this.player.hasPermission("fellesvarsling.add")) {
+			if(!this.player.hasPermission(Permissions.ADMIN) ||
+					!this.player.hasPermission(Permissions.MOD) ||
+					!this.player.hasPermission(Permissions.ADD)) {
 				MessageHandler.sendMessage(this.player, "&cBeklager, men du har ikke tillatelse til å bruke denne kommandoen.");
 				return;
 			}
@@ -51,7 +55,7 @@ public class SubCommands {
 
 		ProxyServer.getInstance().getScheduler().runAsync(FVBungee.getInstance(), () -> {
 			final UUID uuid = UUIDFetcher.getUUID(args[1]);
-			final String playerName = uuid != null ? UUIDFetcher.getName(uuid) : args[1];
+			final String playerName = uuid != null ? NameFetcher.getName(uuid) : args[1];
 			final String reason = reason(args);
 			final String meldingRegistrert = "&eVarsling for &6" + playerName + " &eer registrert med årsak: " + reason;
 			final String meldingUgyldig = "&cSpiller " + args[1] + " er ikke et gyldig spillernavn.";
@@ -83,7 +87,7 @@ public class SubCommands {
 					"&6/fv slett &f[id] - &eSlett oppføring på spiller.",
 					"&6/fv hjelp &f- &eSe denne hjelpesiden.",
 					"&6/fv add &f[spiller] [årsak] - &eLegg til en varsling på spiller.",
-					"&6/fv reload &f- &eLast om de fleste konfigurasjoner. (MySQL krever omstart)");
+					"&6/fv reload &f- &eLast om konfigurasjonsfilen.");
 		}
 
 		else {
@@ -93,7 +97,7 @@ public class SubCommands {
 					"&6/fv slett &f[id] - &eSlett oppføring på spiller.",
 					"&6/fv hjelp &f- &eSe denne hjelpesiden.",
 					"&6/fv add &f[spiller] [årsak] - &eLegg til en varsling på spiller.",
-					"&6/fv reload &f- &eLast om de fleste konfigurasjoner. (MySQL krever omstart)");
+					"&6/fv reload &f- &eLast om konfigurasjonsfilen.");
 		}
 	}
 
@@ -105,7 +109,9 @@ public class SubCommands {
 		}
 
 		if(!isConsole) {
-			if(!this.player.hasPermission("fellesvarsling.lookup")) {
+			if(!this.player.hasPermission(Permissions.ADMIN) ||
+					!this.player.hasPermission(Permissions.MOD) ||
+					!this.player.hasPermission(Permissions.LOOKUP)) {
 				MessageHandler.sendMessage(this.player, "&cBeklager, men du har ikke tillatelse til å bruke denne kommandoen.");
 				return;
 			}
@@ -140,7 +146,7 @@ public class SubCommands {
 
 	public void reload() {
 		if(!isConsole) {
-			if(!this.player.hasPermission("fellesvarsling.reload")) {
+			if(!this.player.hasPermission(Permissions.ADMIN) || !this.player.hasPermission(Permissions.RELOAD)) {
 				MessageHandler.sendMessage(this.player, "&cBeklager, men du har ikke tillatelse til å bruke denne kommandoen.");
 				return;
 			}
@@ -191,7 +197,7 @@ public class SubCommands {
 		}
 
 		if(!isConsole) {
-			if(!this.player.hasPermission("fellesvarsling.slett")) {
+			if(!this.player.hasPermission(Permissions.ADMIN) || !this.player.hasPermission(Permissions.SLETT)) {
 				MessageHandler.sendMessage(this.player, "&cBeklager, men du har ikke tillatelse til å bruke denne kommandoen.");
 				return;
 			}
