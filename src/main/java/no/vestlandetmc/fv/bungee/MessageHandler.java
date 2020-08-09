@@ -41,9 +41,7 @@ public class MessageHandler {
 		message.setClickEvent( new ClickEvent( ClickEvent.Action.RUN_COMMAND, command ) );
 
 		for(final ProxiedPlayer player : FVBungee.getInstance().getProxy().getPlayers()) {
-			if(player.hasPermission(Permissions.ADMIN) ||
-					player.hasPermission(Permissions.MOD) ||
-					player.hasPermission(Permissions.VARSEL))
+			if(player.hasPermission(Permissions.VARSEL))
 				player.sendMessage(message);
 		}
 	}

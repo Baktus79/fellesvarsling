@@ -38,9 +38,7 @@ public class SubCommands {
 		}
 
 		if(!isConsole) {
-			if(!this.player.hasPermission(Permissions.ADMIN) ||
-					!this.player.hasPermission(Permissions.MOD) ||
-					!this.player.hasPermission(Permissions.ADD)) {
+			if(!this.player.hasPermission(Permissions.ADD)) {
 				MessageHandler.sendMessage(this.player, "&cBeklager, men du har ikke tillatelse til å bruke denne kommandoen.");
 				return;
 			}
@@ -109,9 +107,7 @@ public class SubCommands {
 		}
 
 		if(!isConsole) {
-			if(!this.player.hasPermission(Permissions.ADMIN) ||
-					!this.player.hasPermission(Permissions.MOD) ||
-					!this.player.hasPermission(Permissions.LOOKUP)) {
+			if(!this.player.hasPermission(Permissions.LOOKUP)) {
 				MessageHandler.sendMessage(this.player, "&cBeklager, men du har ikke tillatelse til å bruke denne kommandoen.");
 				return;
 			}
@@ -146,7 +142,7 @@ public class SubCommands {
 
 	public void reload() {
 		if(!isConsole) {
-			if(!this.player.hasPermission(Permissions.ADMIN) || !this.player.hasPermission(Permissions.RELOAD)) {
+			if(!this.player.hasPermission(Permissions.RELOAD)) {
 				MessageHandler.sendMessage(this.player, "&cBeklager, men du har ikke tillatelse til å bruke denne kommandoen.");
 				return;
 			}
@@ -197,7 +193,7 @@ public class SubCommands {
 		}
 
 		if(!isConsole) {
-			if(!this.player.hasPermission(Permissions.ADMIN) || !this.player.hasPermission(Permissions.SLETT)) {
+			if(!this.player.hasPermission(Permissions.SLETT)) {
 				MessageHandler.sendMessage(this.player, "&cBeklager, men du har ikke tillatelse til å bruke denne kommandoen.");
 				return;
 			}
