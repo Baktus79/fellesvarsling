@@ -20,7 +20,7 @@ assignees: ''
 #################################
 ```
 
-**CONFIG SECTION (DELETE IF NOT RELEVANT):**
+**KONFIGURASJONSFIL (SLETT HVIS IKKE NØDVENDIG):**
 ```
 ###############################################
 ## BYTT UT MED DINE KONFIGURASJONSOPPSETT ##
