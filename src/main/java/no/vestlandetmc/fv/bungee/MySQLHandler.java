@@ -120,7 +120,7 @@ public class MySQLHandler {
 
 		final String user = NameFetcher.getName(uuid);
 		final ResultSet set = statement.executeQuery();
-		final long unixTime = System.currentTimeMillis() / 1000L;
+		final long unixTime = System.currentTimeMillis();
 		int i = 1;
 
 		if(player == null) { MessageHandler.sendConsole("&e--- ==== &6Varslinger -" + user + " &e==== ---"); }

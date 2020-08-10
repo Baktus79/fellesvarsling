@@ -124,7 +124,7 @@ public class MySQLHandler {
 
 		final String user = UUIDFetcher.getName(uuid);
 		final ResultSet set = statement.executeQuery();
-		final long unixTime = System.currentTimeMillis() / 1000L;
+		final long unixTime = System.currentTimeMillis();
 		int i = 1;
 
 		if(player == null) { MessageHandler.sendConsole("&e--- ==== &6Varslinger - " + user + " &e==== ---"); }
@@ -134,7 +134,7 @@ public class MySQLHandler {
 			final int id = set.getInt("id");
 			final String type = set.getString("type");
 			final String server = set.getString("server");
-			String expire = set.getLong("expire") >= (unixTime * 1000L) ? " &8[&aAktiv&8] " : " &8[&cUtgått&8] ";
+			String expire = set.getLong("expire") >= unixTime ? " &8[&aAktiv&8] " : " &8[&cUtgått&8] ";
 			final String reason = set.getString("reason");
 
 			String typeText = null;
