@@ -1,6 +1,8 @@
 # Felles Varslingsystem for norske Minecraft servere
 
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/Baktus79/fellesvarsling/blob/master/LICENSE) [![GitHub version](https://badge.fury.io/gh/Baktus79%2Ffellesvarsling.svg)](https://github.com/Baktus79/fellesvarsling/releases) [![Discord](https://img.shields.io/discord/295893050272776194?logo=discord)](https://discord.gg/9jFdUaD)
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/Baktus79/fellesvarsling/blob/master/LICENSE) 
+[![GitHub version](https://badge.fury.io/gh/Baktus79%2Ffellesvarsling.svg)](https://github.com/Baktus79/fellesvarsling/releases) 
+[![Discord](https://img.shields.io/discord/295893050272776194?logo=discord)](https://discord.gg/9jFdUaD)
 
 Dette er et system som skal være til hjelp for norske servere til å ha bedre samarbeid og kommunikasjon om hva som rører seg blant de respektive spillerbasene. De fleste spillere rundt omkring er snille og gode, men dessverre så er det slik i alle fellesskap og samfunn at det finnes individer som ikke ønsker å bidra til det positive. Ingen av oss ønsker dårlig stemning! Med et felles varslingsystem kan de fleste server eiere få informasjon om det har vært upassende oppførsel på en annen server.
 
