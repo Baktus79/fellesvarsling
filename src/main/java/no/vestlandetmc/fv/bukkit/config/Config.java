@@ -30,7 +30,9 @@ public class Config extends ConfigHandler {
 	LITEBANS_KICK,
 	LITEBANS_MUTE,
 	LITEBANS_WARN,
-	LITEBANS_ENABLE;
+	LITEBANS_ENABLE,
+	CMI_ENABLE,
+	CMI_BAN;
 
 	private void onLoad() {
 
@@ -50,6 +52,10 @@ public class Config extends ConfigHandler {
 		LITEBANS_MUTE = getBoolean("tilkoblinger.litebans.type.mute");
 		LITEBANS_WARN = getBoolean("tilkoblinger.litebans.type.warn");
 		LITEBANS_ENABLE = getBoolean("tilkoblinger.litebans.enable");
+
+		//CMI oppsett
+		CMI_BAN = getBoolean("tilkoblinger.cmi.type.ban");
+		CMI_ENABLE = getBoolean("tilkoblinger.cmi.enable");
 
 	}
 

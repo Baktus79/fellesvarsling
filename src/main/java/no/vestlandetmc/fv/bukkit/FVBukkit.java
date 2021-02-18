@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import no.vestlandetmc.fv.bukkit.commands.FellesVarsling;
 import no.vestlandetmc.fv.bukkit.commands.TabComplete;
 import no.vestlandetmc.fv.bukkit.config.Config;
+import no.vestlandetmc.fv.bukkit.listeners.CMIListener;
 import no.vestlandetmc.fv.bukkit.listeners.LitebansAPI;
 import no.vestlandetmc.fv.bukkit.listeners.PlayerListener;
 
@@ -40,6 +41,13 @@ public class FVBukkit extends JavaPlugin {
 				new LitebansAPI();
 				MessageHandler.sendConsole("[" + getDescription().getPrefix() + "] Litebans ble funnet og koblet til");
 			} else { MessageHandler.sendConsole("[" + getDescription().getPrefix() + "] Litebans ble funnet men er ikke koblet til. Se config.yml --> enable=true/false"); }
+		}
+
+		if(getServer().getPluginManager().getPlugin("CMI") != null) {
+			if(Config.CMI_ENABLE) {
+				this.getServer().getPluginManager().registerEvents(new CMIListener(), this);
+				MessageHandler.sendConsole("[" + getDescription().getPrefix() + "] CMI ble funnet og koblet til");
+			} else { MessageHandler.sendConsole("[" + getDescription().getPrefix() + "] CMI ble funnet men er ikke koblet til. Se config.yml --> enable=true/false"); }
 		}
 
 	}
