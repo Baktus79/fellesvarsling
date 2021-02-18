@@ -6,7 +6,7 @@ description: Felles varslingssystem for Norske servere.
 website: www.vestlandetmc.no
 prefix: FellesVarsling
 api-version: 1.13
-softdepend: [LiteBans]
+softdepend: [LiteBans, CMI]
 commands:
   fellesvarsling:
     description: Send en forespørsel til en annen spiller om å få se hvor mye penger en har.
