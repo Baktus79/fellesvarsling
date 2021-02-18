@@ -80,6 +80,11 @@ public class MySQLHandler {
 		return true;
 	}
 
+	/**
+	 * Ser etter kontakt med databasen. Setter opp tabeller hvis kontakt.
+	 *
+	 * @return True eller false.
+	 */
 	public boolean initialize() {
 		try {
 			return checkConnection();
@@ -88,6 +93,13 @@ public class MySQLHandler {
 		}
 	}
 
+	/**
+	 * Sjekk om en spiller har blitt varslet.
+	 *
+	 * @param uuid Hvilken spiller som skal sjekkes.
+	 * @return True eller false.
+	 * @throws SQLException
+	 */
 	public boolean erVarslet(UUID uuid) throws SQLException {
 		try {
 			checkConnection();
@@ -111,6 +123,13 @@ public class MySQLHandler {
 
 	}
 
+	/**
+	 * Sjekk om en spiller har blitt varslet.
+	 *
+	 * @param player Spilleren som mottar varslingen. Hvis player == null vil konsollen motta meldingen.
+	 * @param uuid Hvilken spiller som skal sjekkes for varslinger.
+	 * @throws SQLException
+	 */
 	public void getInfo(Player player, UUID uuid) throws SQLException {
 		try {
 			checkConnection();
@@ -163,6 +182,15 @@ public class MySQLHandler {
 
 	}
 
+	/**
+	 * Registrer en spiller i databasen.
+	 *
+	 * @param uuid Spilleren som registreres.
+	 * @param type Definer hva slags registrering dette er.
+	 * @param expire Når straffen utgår på Litebans.
+	 * @param reason Årsaken til registreringen.
+	 * @throws SQLException
+	 */
 	public void setUser(UUID uuid, String type, long expire, String reason) throws SQLException {
 		try {
 			checkConnection();
@@ -186,6 +214,13 @@ public class MySQLHandler {
 
 	}
 
+	/**
+	 * Fjern en oppføring i databasen.
+	 *
+	 * @param id ID på oppføringen.
+	 * @return True eller false.
+	 * @throws SQLException
+	 */
 	public boolean deleteUser(int id) throws SQLException {
 		try {
 			checkConnection();
@@ -210,6 +245,12 @@ public class MySQLHandler {
 		return complete;
 	}
 
+	/**
+	 * Fjern oppføringer som er eldre enn gitt tidsperiode.
+	 *
+	 * @param days Fjern alle oppføringer som er eldre enn x.
+	 * @throws SQLException
+	 */
 	public void deleteOld(int days) throws SQLException {
 		try {
 			checkConnection();

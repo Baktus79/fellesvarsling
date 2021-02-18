@@ -17,4 +17,8 @@ tilkoblinger:
       ban: true
       kick: false
       mute: false
-      warn: false 
+      warn: false
+  cmi:
+    enable: true
+    type:
+      ban: true
