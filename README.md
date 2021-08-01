@@ -25,5 +25,4 @@ Om du har funnet systemfeil så kan du rapportere dette på [Issues](https://git
 * Vestlandet MC - [Discord](https://discord.gg/9jFdUaD) [Nettside](https://www.vestlandetmc.no)
 * Dincraft - [Discord](https://discord.gg/teeHV6A)
 * Bondelivet - [Discord](https://discord.gg/QUdCdsj)
-* Midgard - [Discord](https://discord.gg/EUu2tAX) [Nettside](https://www.midgardmc.net/)
 * FrøyaCraft - [Discord](https://discord.gg/9uGCPXe) [Nettside](https://xn--fryacraft-m8a.no/)
