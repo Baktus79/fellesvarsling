@@ -105,16 +105,7 @@
 				</executions>
 				<configuration>
 					<minimizeJar>true</minimizeJar>
-					<relocations>
-						<relocation>
-							<pattern>com.zaxxer.hikari.HikariConfig;</pattern>
-							<shadedPattern>no.vestlandetmc.hikari.HikariConfig</shadedPattern>
-						</relocation>
-						<relocation>
-							<pattern>com.zaxxer.hikari.HikariDataSource;</pattern>
-							<shadedPattern>no.vestlandetmc.hikari.HikariDataSource</shadedPattern>
-						</relocation>
-					</relocations>
+					<createDependencyReducedPom>false</createDependencyReducedPom>
 				</configuration>
 			</plugin>
 		</plugins>
