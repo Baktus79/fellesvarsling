@@ -10,8 +10,7 @@ import org.bukkit.entity.Player;
 
 import no.vestlandetmc.fv.bukkit.MessageHandler;
 import no.vestlandetmc.fv.bukkit.config.Config;
-import no.vestlandetmc.fv.util.MySqlPool;
-import no.vestlandetmc.fv.util.NameFetcher;
+import no.vestlandetmc.fv.bukkit.util.NameFetcher;
 
 public class MySQLHandler {
 

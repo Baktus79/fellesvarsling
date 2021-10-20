@@ -12,9 +12,9 @@ import no.vestlandetmc.fv.bungee.MessageHandler;
 import no.vestlandetmc.fv.bungee.Permissions;
 import no.vestlandetmc.fv.bungee.config.Config;
 import no.vestlandetmc.fv.bungee.database.MySQLHandler;
-import no.vestlandetmc.fv.util.MySqlPool;
-import no.vestlandetmc.fv.util.NameFetcher;
-import no.vestlandetmc.fv.util.UUIDFetcher;
+import no.vestlandetmc.fv.bungee.database.MySqlPool;
+import no.vestlandetmc.fv.bungee.util.NameFetcher;
+import no.vestlandetmc.fv.bungee.util.UUIDFetcher;
 
 public class SubCommands {
 

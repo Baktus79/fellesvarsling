@@ -9,8 +9,7 @@ import java.util.UUID;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import no.vestlandetmc.fv.bungee.MessageHandler;
 import no.vestlandetmc.fv.bungee.config.Config;
-import no.vestlandetmc.fv.util.MySqlPool;
-import no.vestlandetmc.fv.util.NameFetcher;
+import no.vestlandetmc.fv.bungee.util.NameFetcher;
 
 public class MySQLHandler {
 

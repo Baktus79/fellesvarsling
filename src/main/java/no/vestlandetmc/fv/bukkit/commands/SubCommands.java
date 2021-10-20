@@ -11,9 +11,9 @@ import no.vestlandetmc.fv.bukkit.FVBukkit;
 import no.vestlandetmc.fv.bukkit.MessageHandler;
 import no.vestlandetmc.fv.bukkit.config.Config;
 import no.vestlandetmc.fv.bukkit.database.MySQLHandler;
-import no.vestlandetmc.fv.util.MySqlPool;
-import no.vestlandetmc.fv.util.NameFetcher;
-import no.vestlandetmc.fv.util.UUIDFetcher;
+import no.vestlandetmc.fv.bukkit.database.MySqlPool;
+import no.vestlandetmc.fv.bukkit.util.NameFetcher;
+import no.vestlandetmc.fv.bukkit.util.UUIDFetcher;
 
 public class SubCommands {
 

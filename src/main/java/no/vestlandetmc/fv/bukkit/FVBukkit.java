@@ -7,10 +7,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import no.vestlandetmc.fv.bukkit.commands.FellesVarsling;
 import no.vestlandetmc.fv.bukkit.config.Config;
 import no.vestlandetmc.fv.bukkit.database.MySQLHandler;
+import no.vestlandetmc.fv.bukkit.database.MySqlPool;
 import no.vestlandetmc.fv.bukkit.listeners.CMIListener;
 import no.vestlandetmc.fv.bukkit.listeners.LitebansAPI;
 import no.vestlandetmc.fv.bukkit.listeners.PlayerListener;
-import no.vestlandetmc.fv.util.MySqlPool;
 
 public class FVBukkit extends JavaPlugin {
 

@@ -7,9 +7,9 @@ import net.md_5.bungee.api.plugin.Plugin;
 import no.vestlandetmc.fv.bungee.commands.FellesVarslingBungee;
 import no.vestlandetmc.fv.bungee.config.Config;
 import no.vestlandetmc.fv.bungee.database.MySQLHandler;
+import no.vestlandetmc.fv.bungee.database.MySqlPool;
 import no.vestlandetmc.fv.bungee.listeners.LitebansAPI;
 import no.vestlandetmc.fv.bungee.listeners.PlayerListener;
-import no.vestlandetmc.fv.util.MySqlPool;
 
 public class FVBungee extends Plugin {
 
