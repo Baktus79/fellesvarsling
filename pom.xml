@@ -5,7 +5,7 @@
 
 	<groupId>no.vestlandetmc</groupId>
 	<artifactId>FellesVarsling</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 	<packaging>jar</packaging>
 
 	<name>fv</name>
@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.16.5-R0.1-SNAPSHOT</version>
+			<version>1.17.1-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -52,27 +52,32 @@
 		<dependency>
 			<groupId>net.md-5</groupId>
 			<artifactId>bungeecord-api</artifactId>
-			<version>1.16-R0.2-SNAPSHOT</version>
+			<version>1.17-R0.1-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.md-5</groupId>
 			<artifactId>bungeecord-api</artifactId>
-			<version>1.16-R0.2-SNAPSHOT</version>
+			<version>1.17-R0.1-SNAPSHOT</version>
 			<type>javadoc</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.mojang</groupId>
+			<artifactId>authlib</artifactId>
+			<version>3.1.36</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.21</version>
-		</dependency>
-		<dependency>
-			<groupId>com.mojang</groupId>
-			<artifactId>authlib</artifactId>
-			<version>1.6.25</version>
-			<scope>provided</scope>
+			<version>8.0.27</version>
 		</dependency>
 
 	</dependencies>
@@ -84,5 +89,34 @@
 				<filtering>true</filtering>
 			</resource>
 		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.2.4</version>
+				<executions>
+					<execution>
+						<id>shade</id>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<minimizeJar>true</minimizeJar>
+					<relocations>
+						<relocation>
+							<pattern>com.zaxxer.hikari.HikariConfig;</pattern>
+							<shadedPattern>no.vestlandetmc.hikari.HikariConfig</shadedPattern>
+						</relocation>
+						<relocation>
+							<pattern>com.zaxxer.hikari.HikariDataSource;</pattern>
+							<shadedPattern>no.vestlandetmc.hikari.HikariDataSource</shadedPattern>
+						</relocation>
+					</relocations>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 </project>
