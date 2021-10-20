@@ -19,7 +19,10 @@ public class Config extends ConfigHandler {
 	SERVERNAME;
 
 	public static int
-	PORT;
+	PORT,
+	MAX_POOL,
+	CON_TIMEOUT,
+	CON_LIFETIME;
 
 	public static boolean
 	BLACKLIST,
@@ -45,6 +48,9 @@ public class Config extends ConfigHandler {
 		WORD_FILTER = getStringList("filter.wordfilter");
 		BLACKLIST = getBoolean("filter.blacklist");
 		ENABLE_SSL = getBoolean("mysql.enable-ssl");
+		MAX_POOL = getInt("mysql.pool.max-pool-size");
+		CON_TIMEOUT = getInt("mysql.pool.connection-timeout") * 1000;
+		CON_LIFETIME = getInt("mysql.pool.max-lifetime") * 1000;
 
 		//Litebans oppsett
 		LITEBANS_BAN = getBoolean("tilkoblinger.litebans.type.ban");

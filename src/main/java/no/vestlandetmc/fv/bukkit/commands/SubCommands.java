@@ -9,9 +9,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import no.vestlandetmc.fv.bukkit.FVBukkit;
 import no.vestlandetmc.fv.bukkit.MessageHandler;
-import no.vestlandetmc.fv.bukkit.MySQLHandler;
-import no.vestlandetmc.fv.bukkit.UUIDFetcher;
 import no.vestlandetmc.fv.bukkit.config.Config;
+import no.vestlandetmc.fv.bukkit.database.MySQLHandler;
+import no.vestlandetmc.fv.util.MySqlPool;
+import no.vestlandetmc.fv.util.NameFetcher;
+import no.vestlandetmc.fv.util.UUIDFetcher;
 
 public class SubCommands {
 
@@ -54,7 +56,7 @@ public class SubCommands {
 			@Override
 			public void run() {
 				final UUID uuid = UUIDFetcher.getUUID(args[1]);
-				final String playerName = uuid != null ? UUIDFetcher.getName(uuid) : args[1];
+				final String playerName = uuid != null ? NameFetcher.getName(uuid) : args[1];
 				final String reason = reason(args);
 				final String meldingRegistrert = "&eVarsling for &6" + playerName + " &eer registrert med årsak: " + reason;
 				final String meldingUgyldig = "&cSpiller " + args[1] + " er ikke et gyldig spillernavn.";
@@ -167,7 +169,10 @@ public class SubCommands {
 		if(!isConsole) { MessageHandler.sendMessage(player, message); }
 		else { MessageHandler.sendConsole(message); }
 
-		if(new MySQLHandler().initialize()) {
+		new MySqlPool().initialize();
+
+		try {
+			MySqlPool.getConnection();
 			if(!isConsole) { MessageHandler.sendMessage(player, sqlEnabled); }
 			else { MessageHandler.sendConsole(sqlEnabled); }
 
@@ -175,7 +180,7 @@ public class SubCommands {
 			else { MessageHandler.sendConsole(sqlSS); }
 
 			MySQLHandler.sqlEnabled = true;
-		} else {
+		} catch (final SQLException e) {
 			if(!isConsole) { MessageHandler.sendMessage(player, sqlDisable); }
 			else {
 				MySQLHandler.sqlEnabled = false;

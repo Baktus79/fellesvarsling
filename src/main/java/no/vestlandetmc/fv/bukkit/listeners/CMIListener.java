@@ -10,8 +10,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.Zrips.CMI.events.CMIPlayerBanEvent;
 
 import no.vestlandetmc.fv.bukkit.FVBukkit;
-import no.vestlandetmc.fv.bukkit.MySQLHandler;
 import no.vestlandetmc.fv.bukkit.config.Config;
+import no.vestlandetmc.fv.bukkit.database.MySQLHandler;
 
 public class CMIListener implements Listener {
 

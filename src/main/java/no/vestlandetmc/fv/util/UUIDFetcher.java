@@ -1,4 +1,4 @@
-package no.vestlandetmc.fv.bungee;
+package no.vestlandetmc.fv.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

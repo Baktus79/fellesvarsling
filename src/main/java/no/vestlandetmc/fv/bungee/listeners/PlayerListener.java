@@ -10,7 +10,7 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import no.vestlandetmc.fv.bungee.FVBungee;
 import no.vestlandetmc.fv.bungee.MessageHandler;
-import no.vestlandetmc.fv.bungee.MySQLHandler;
+import no.vestlandetmc.fv.bungee.database.MySQLHandler;
 
 public class PlayerListener implements Listener {
 

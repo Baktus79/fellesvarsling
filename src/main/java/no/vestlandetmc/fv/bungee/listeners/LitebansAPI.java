@@ -7,8 +7,8 @@ import litebans.api.Entry;
 import litebans.api.Events;
 import net.md_5.bungee.api.ProxyServer;
 import no.vestlandetmc.fv.bungee.FVBungee;
-import no.vestlandetmc.fv.bungee.MySQLHandler;
 import no.vestlandetmc.fv.bungee.config.Config;
+import no.vestlandetmc.fv.bungee.database.MySQLHandler;
 
 public class LitebansAPI {
 

@@ -1,50 +1,31 @@
-package no.vestlandetmc.fv.bukkit;
+package no.vestlandetmc.fv.bukkit.database;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
+import no.vestlandetmc.fv.bukkit.MessageHandler;
 import no.vestlandetmc.fv.bukkit.config.Config;
+import no.vestlandetmc.fv.util.MySqlPool;
+import no.vestlandetmc.fv.util.NameFetcher;
 
 public class MySQLHandler {
 
 	public static boolean sqlEnabled = false;
 	private Connection connection;
 
-	private Connection getNewConnection() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-
-			final String enableSSL = !Config.ENABLE_SSL ? "&useSSL=false" : "";
-			final String url = "jdbc:mysql://" + Config.HOST + ":" + Config.PORT + "/" + Config.DATABASE + "?autoReconnect=true" + enableSSL;
-			final Connection connection = DriverManager.getConnection(url, Config.USER, Config.PASSWORD);
-
-			return connection;
-
-		} catch (ClassNotFoundException | SQLException e) {
-			return null;
-		}
-	}
-
 	public MySQLHandler() {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				try {
-					if (connection != null && !connection.isClosed()) {
-						connection.createStatement().execute("SELECT 1");
-					}
-				} catch (final SQLException e) {
-					connection = getNewConnection();
-				}
+		try {
+			if(connection == null) {
+				connection = MySqlPool.getConnection();
 			}
-		}.runTaskAsynchronously(FVBukkit.getInstance());
+		} catch (final SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void close() throws SQLException {
@@ -58,41 +39,6 @@ public class MySQLHandler {
 		return success;
 	}
 
-	public boolean checkConnection() throws SQLException {
-		if (connection == null || connection.isClosed()) {
-			connection = getNewConnection();
-
-			if (connection == null || connection.isClosed()) {
-				return false;
-			}
-
-			execute("CREATE TABLE IF NOT EXISTS fellesvarsling("
-					+ "id INTEGER AUTO_INCREMENT PRIMARY KEY,"
-					+ "uuid TEXT,"
-					+ "type TEXT,"
-					+ "server TEXT,"
-					+ "timestamp BIGINT,"
-					+ "expire BIGINT,"
-					+ "reason TEXT"
-					+ ")");
-		}
-
-		return true;
-	}
-
-	/**
-	 * Ser etter kontakt med databasen. Setter opp tabeller hvis kontakt.
-	 *
-	 * @return True eller false.
-	 */
-	public boolean initialize() {
-		try {
-			return checkConnection();
-		} catch (final SQLException e) {
-			return false;
-		}
-	}
-
 	/**
 	 * Sjekk om en spiller har blitt varslet.
 	 *
@@ -101,12 +47,6 @@ public class MySQLHandler {
 	 * @throws SQLException
 	 */
 	public boolean erVarslet(UUID uuid) throws SQLException {
-		try {
-			checkConnection();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-
 		final String sql = "SELECT uuid FROM fellesvarsling WHERE uuid=?";
 		final PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, uuid.toString());
@@ -117,7 +57,11 @@ public class MySQLHandler {
 			return true;
 		}
 
-		set.close();
+		if(connection != null)
+			connection.close();
+
+		if(statement != null)
+			statement.close();
 
 		return false;
 
@@ -131,17 +75,11 @@ public class MySQLHandler {
 	 * @throws SQLException
 	 */
 	public void getInfo(Player player, UUID uuid) throws SQLException {
-		try {
-			checkConnection();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-
 		final String sql = "SELECT id, type, server, expire, reason FROM fellesvarsling WHERE uuid=? ORDER BY timestamp DESC";
 		final PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, uuid.toString());
 
-		final String user = UUIDFetcher.getName(uuid);
+		final String user = NameFetcher.getName(uuid);
 		final ResultSet set = statement.executeQuery();
 		final long unixTime = System.currentTimeMillis();
 		int i = 1;
@@ -178,7 +116,11 @@ public class MySQLHandler {
 			if(i == 10) { break; }
 		}
 
-		set.close();
+		if(connection != null)
+			connection.close();
+
+		if(statement != null)
+			statement.close();
 
 	}
 
@@ -192,12 +134,6 @@ public class MySQLHandler {
 	 * @throws SQLException
 	 */
 	public void setUser(UUID uuid, String type, long expire, String reason) throws SQLException {
-		try {
-			checkConnection();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-
 		final long timestamp = System.currentTimeMillis() / 1000L;
 		final String sql = "INSERT INTO fellesvarsling (uuid, type, server, timestamp, expire, reason) VALUES (?, ?, ?, ?, ?, ?)";
 		final PreparedStatement statement = connection.prepareStatement(sql);
@@ -210,7 +146,12 @@ public class MySQLHandler {
 		statement.setString(6, reason);
 
 		statement.executeUpdate();
-		statement.close();
+
+		if(connection != null)
+			connection.close();
+
+		if(statement != null)
+			statement.close();
 
 	}
 
@@ -222,12 +163,6 @@ public class MySQLHandler {
 	 * @throws SQLException
 	 */
 	public boolean deleteUser(int id) throws SQLException {
-		try {
-			checkConnection();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-
 		boolean complete;
 		final String sql = "DELETE FROM fellesvarsling WHERE id=? AND server=?";
 		final PreparedStatement statement = connection.prepareStatement(sql);
@@ -240,7 +175,11 @@ public class MySQLHandler {
 		} else { complete = true; }
 
 
-		statement.close();
+		if(connection != null)
+			connection.close();
+
+		if(statement != null)
+			statement.close();
 
 		return complete;
 	}
@@ -252,19 +191,18 @@ public class MySQLHandler {
 	 * @throws SQLException
 	 */
 	public void deleteOld(int days) throws SQLException {
-		try {
-			checkConnection();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-
-		final long daysSeconds = (days * 24) * 60 * 60;
-		final long unixTime = (System.currentTimeMillis() / 1000L) - daysSeconds;
+		final long daysSeconds = days * 24 * 60 * 60;
+		final long unixTime = System.currentTimeMillis() / 1000L - daysSeconds;
 		final String sql = "DELETE FROM fellesvarsling WHERE timestamp<?";
 		final PreparedStatement statement = connection.prepareStatement(sql);
 
 		statement.setLong(1, unixTime);
-		statement.close();
+
+		if(connection != null)
+			connection.close();
+
+		if(statement != null)
+			statement.close();
 
 	}
 

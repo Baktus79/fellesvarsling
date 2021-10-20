@@ -5,6 +5,10 @@ mysql:
   password: minecraft
   database: Minecraft
   enable-ssl: false
+  pool:
+    max-pool-size: 10
+    connection-timeout: 25
+    max-lifetime: 1800
 servername: Vestlandet
 filter:
   blacklist: true

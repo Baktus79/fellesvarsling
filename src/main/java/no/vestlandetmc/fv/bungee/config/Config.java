@@ -45,7 +45,10 @@ public class Config {
 	SERVERNAME;
 
 	public static int
-	PORT;
+	PORT,
+	MAX_POOL,
+	CON_TIMEOUT,
+	CON_LIFETIME;
 
 	public static boolean
 	BLACKLIST,
@@ -69,6 +72,9 @@ public class Config {
 		WORD_FILTER = this.config.getStringList("filter.wordfilter");
 		BLACKLIST = this.config.getBoolean("filter.blacklist");
 		ENABLE_SSL = this.config.getBoolean("mysql.enable-ssl");
+		MAX_POOL = this.config.getInt("mysql.pool.max-pool-size");
+		CON_TIMEOUT = this.config.getInt("mysql.pool.connection-timeout") * 1000;
+		CON_LIFETIME = this.config.getInt("mysql.pool.max-lifetime") * 1000;
 
 		//Litebans oppsett
 		LITEBANS_BAN = this.config.getBoolean("tilkoblinger.litebans.type.ban");

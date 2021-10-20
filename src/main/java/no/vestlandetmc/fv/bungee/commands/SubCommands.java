@@ -9,11 +9,12 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import no.vestlandetmc.fv.bungee.FVBungee;
 import no.vestlandetmc.fv.bungee.MessageHandler;
-import no.vestlandetmc.fv.bungee.MySQLHandler;
-import no.vestlandetmc.fv.bungee.NameFetcher;
 import no.vestlandetmc.fv.bungee.Permissions;
-import no.vestlandetmc.fv.bungee.UUIDFetcher;
 import no.vestlandetmc.fv.bungee.config.Config;
+import no.vestlandetmc.fv.bungee.database.MySQLHandler;
+import no.vestlandetmc.fv.util.MySqlPool;
+import no.vestlandetmc.fv.util.NameFetcher;
+import no.vestlandetmc.fv.util.UUIDFetcher;
 
 public class SubCommands {
 
@@ -164,7 +165,10 @@ public class SubCommands {
 		if(!isConsole) { MessageHandler.sendMessage(player, message); }
 		else { MessageHandler.sendConsole(message); }
 
-		if(new MySQLHandler().initialize()) {
+		new MySqlPool().initialize();
+
+		try {
+			MySqlPool.getConnection();
 			if(!isConsole) { MessageHandler.sendMessage(player, sqlEnabled); }
 			else { MessageHandler.sendConsole(sqlEnabled); }
 
@@ -172,7 +176,7 @@ public class SubCommands {
 			else { MessageHandler.sendConsole(sqlSS); }
 
 			MySQLHandler.sqlEnabled = true;
-		} else {
+		} catch (final SQLException e) {
 			if(!isConsole) { MessageHandler.sendMessage(player, sqlDisable); }
 			else {
 				MySQLHandler.sqlEnabled = false;
