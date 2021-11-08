@@ -1,46 +1,29 @@
-package no.vestlandetmc.fv.bungee;
+package no.vestlandetmc.fv.bungee.database;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import no.vestlandetmc.fv.bungee.MessageHandler;
 import no.vestlandetmc.fv.bungee.config.Config;
+import no.vestlandetmc.fv.bungee.util.NameFetcher;
 
 public class MySQLHandler {
 
 	public static boolean sqlEnabled = false;
 	private Connection connection;
 
-	private Connection getNewConnection() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-
-			final String enableSSL = !Config.ENABLE_SSL ? "&useSSL=false" : "";
-			final String url = "jdbc:mysql://" + Config.HOST + ":" + Config.PORT + "/" + Config.DATABASE + "?autoReconnect=true" + enableSSL;
-			final Connection connection = DriverManager.getConnection(url, Config.USER, Config.PASSWORD);
-
-			return connection;
-
-		} catch (ClassNotFoundException | SQLException e) {
-			return null;
-		}
-	}
-
 	public MySQLHandler() {
-		ProxyServer.getInstance().getScheduler().runAsync(FVBungee.getInstance(), () -> {
-			try {
-				if (connection != null && !connection.isClosed()) {
-					connection.createStatement().execute("SELECT 1");
-				}
-			} catch (final SQLException e) {
-				connection = getNewConnection();
+		try {
+			if(connection == null) {
+				connection = MySqlPool.getConnection();
 			}
-		});
+		} catch (final SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void close() throws SQLException {
@@ -54,43 +37,14 @@ public class MySQLHandler {
 		return success;
 	}
 
-	public boolean checkConnection() throws SQLException {
-		if (connection == null || connection.isClosed()) {
-			connection = getNewConnection();
-
-			if (connection == null || connection.isClosed()) {
-				return false;
-			}
-
-			execute("CREATE TABLE IF NOT EXISTS fellesvarsling("
-					+ "id INTEGER AUTO_INCREMENT PRIMARY KEY,"
-					+ "uuid TEXT,"
-					+ "type TEXT,"
-					+ "server TEXT,"
-					+ "timestamp BIGINT,"
-					+ "expire BIGINT,"
-					+ "reason TEXT"
-					+ ")");
-		}
-
-		return true;
-	}
-
-	public boolean initialize() {
-		try {
-			return checkConnection();
-		} catch (final SQLException e) {
-			return false;
-		}
-	}
-
+	/**
+	 * Sjekk om en spiller har blitt varslet.
+	 *
+	 * @param uuid Hvilken spiller som skal sjekkes.
+	 * @return True eller false.
+	 * @throws SQLException
+	 */
 	public boolean erVarslet(UUID uuid) throws SQLException {
-		try {
-			checkConnection();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-
 		final String sql = "SELECT uuid FROM fellesvarsling WHERE uuid=?";
 		final PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, uuid.toString());
@@ -101,19 +55,24 @@ public class MySQLHandler {
 			return true;
 		}
 
-		set.close();
+		if(connection != null)
+			connection.close();
+
+		if(statement != null)
+			statement.close();
 
 		return false;
 
 	}
 
+	/**
+	 * Sjekk om en spiller har blitt varslet.
+	 *
+	 * @param player Spilleren som mottar varslingen. Hvis player == null vil konsollen motta meldingen.
+	 * @param uuid Hvilken spiller som skal sjekkes for varslinger.
+	 * @throws SQLException
+	 */
 	public void getInfo(ProxiedPlayer player, UUID uuid) throws SQLException {
-		try {
-			checkConnection();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-
 		final String sql = "SELECT id, type, server, expire, reason FROM fellesvarsling WHERE uuid=? ORDER BY timestamp DESC";
 		final PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, uuid.toString());
@@ -130,7 +89,7 @@ public class MySQLHandler {
 			final int id = set.getInt("id");
 			final String type = set.getString("type");
 			final String server = set.getString("server");
-			String expire = set.getLong("expire") >= (unixTime * 1000L) ? " &8[&aAktiv&8] " : " &8[&cUtgått&8] ";
+			String expire = set.getLong("expire") >= unixTime ? " &8[&aAktiv&8] " : " &8[&cUtgått&8] ";
 			final String reason = set.getString("reason");
 
 			String typeText = null;
@@ -155,17 +114,24 @@ public class MySQLHandler {
 			if(i == 10) { break; }
 		}
 
-		set.close();
+		if(connection != null)
+			connection.close();
+
+		if(statement != null)
+			statement.close();
 
 	}
 
+	/**
+	 * Registrer en spiller i databasen.
+	 *
+	 * @param uuid Spilleren som registreres.
+	 * @param type Definer hva slags registrering dette er.
+	 * @param expire Når straffen utgår på Litebans.
+	 * @param reason Årsaken til registreringen.
+	 * @throws SQLException
+	 */
 	public void setUser(UUID uuid, String type, long expire, String reason) throws SQLException {
-		try {
-			checkConnection();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-
 		final long timestamp = System.currentTimeMillis() / 1000L;
 		final String sql = "INSERT INTO fellesvarsling (uuid, type, server, timestamp, expire, reason) VALUES (?, ?, ?, ?, ?, ?)";
 		final PreparedStatement statement = connection.prepareStatement(sql);
@@ -178,17 +144,23 @@ public class MySQLHandler {
 		statement.setString(6, reason);
 
 		statement.executeUpdate();
-		statement.close();
+
+		if(connection != null)
+			connection.close();
+
+		if(statement != null)
+			statement.close();
 
 	}
 
+	/**
+	 * Fjern en oppføring i databasen.
+	 *
+	 * @param id ID på oppføringen.
+	 * @return True eller false.
+	 * @throws SQLException
+	 */
 	public boolean deleteUser(int id) throws SQLException {
-		try {
-			checkConnection();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-
 		boolean complete;
 		final String sql = "DELETE FROM fellesvarsling WHERE id=? AND server=?";
 		final PreparedStatement statement = connection.prepareStatement(sql);
@@ -201,25 +173,34 @@ public class MySQLHandler {
 		} else { complete = true; }
 
 
-		statement.close();
+		if(connection != null)
+			connection.close();
+
+		if(statement != null)
+			statement.close();
 
 		return complete;
 	}
 
+	/**
+	 * Fjern oppføringer som er eldre enn gitt tidsperiode.
+	 *
+	 * @param days Fjern alle oppføringer som er eldre enn x.
+	 * @throws SQLException
+	 */
 	public void deleteOld(int days) throws SQLException {
-		try {
-			checkConnection();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-
-		final long daysSeconds = (days * 24) * 60 * 60;
-		final long unixTime = (System.currentTimeMillis() / 1000L) - daysSeconds;
+		final long daysSeconds = days * 24 * 60 * 60;
+		final long unixTime = System.currentTimeMillis() / 1000L - daysSeconds;
 		final String sql = "DELETE FROM fellesvarsling WHERE timestamp<?";
 		final PreparedStatement statement = connection.prepareStatement(sql);
 
 		statement.setLong(1, unixTime);
-		statement.close();
+
+		if(connection != null)
+			connection.close();
+
+		if(statement != null)
+			statement.close();
 
 	}
 

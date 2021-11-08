@@ -8,8 +8,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import litebans.api.Entry;
 import litebans.api.Events;
 import no.vestlandetmc.fv.bukkit.FVBukkit;
-import no.vestlandetmc.fv.bukkit.MySQLHandler;
 import no.vestlandetmc.fv.bukkit.config.Config;
+import no.vestlandetmc.fv.bukkit.database.MySQLHandler;
 
 public class LitebansAPI {
 

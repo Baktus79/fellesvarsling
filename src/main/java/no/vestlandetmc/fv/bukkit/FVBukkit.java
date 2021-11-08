@@ -1,10 +1,13 @@
 package no.vestlandetmc.fv.bukkit;
 
+import java.sql.SQLException;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import no.vestlandetmc.fv.bukkit.commands.FellesVarsling;
-import no.vestlandetmc.fv.bukkit.commands.TabComplete;
 import no.vestlandetmc.fv.bukkit.config.Config;
+import no.vestlandetmc.fv.bukkit.database.MySQLHandler;
+import no.vestlandetmc.fv.bukkit.database.MySqlPool;
 import no.vestlandetmc.fv.bukkit.listeners.CMIListener;
 import no.vestlandetmc.fv.bukkit.listeners.LitebansAPI;
 import no.vestlandetmc.fv.bukkit.listeners.PlayerListener;
@@ -22,16 +25,18 @@ public class FVBukkit extends JavaPlugin {
 		instance = this;
 
 		this.getCommand("fellesvarsling").setExecutor(new FellesVarsling());
-		this.getCommand("fellesvarsling").setTabCompleter(new TabComplete());
+		this.getCommand("fellesvarsling").setTabCompleter(new FellesVarsling());
 		Config.initialize();
 
 		MessageHandler.sendConsole("[" + getDescription().getPrefix() + "] Kontakter databasen...");
+		new MySqlPool().initialize();
 
-		if(new MySQLHandler().initialize()) {
+		try {
+			MySqlPool.getConnection();
 			MessageHandler.sendConsole("[" + getDescription().getPrefix() + "] Kontakt med database er oppnådd");
 			this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 			MySQLHandler.sqlEnabled = true;
-		} else {
+		} catch (final SQLException e) {
 			MessageHandler.sendConsole("[" + getDescription().getPrefix() + "] Kontakt med database feilet");
 			MySQLHandler.sqlEnabled = false;
 		}

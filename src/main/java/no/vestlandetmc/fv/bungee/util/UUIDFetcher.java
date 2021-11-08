@@ -1,4 +1,4 @@
-package no.vestlandetmc.fv.bungee;
+package no.vestlandetmc.fv.bungee.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -38,6 +38,9 @@ public final class UUIDFetcher {
 	public static UUID getUUID(String playername) {
 		final String output = callURL("https://api.mojang.com/users/profiles" + "/minecraft/" + playername);
 		final String u = readData(output);
+
+		if(u.isBlank()) { return null; }
+
 		String uuid = "";
 		for (int i = 0; i <= 31; i++) {
 			uuid = uuid + u.charAt(i);
@@ -49,8 +52,14 @@ public final class UUIDFetcher {
 	}
 
 	private static String readData(String toRead) {
-		final String[] parts = toRead.split(":");
-		final String[] uuid = parts[2].split("}");
+		String[] uuid = null;
+
+		try {
+			final String[] parts = toRead.split(":");
+			uuid = parts[2].split("}");
+		} catch (final ArrayIndexOutOfBoundsException e) {
+			return "";
+		}
 
 		return uuid[0].replaceAll("\"", "");
 	}
