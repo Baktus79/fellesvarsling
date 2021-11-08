@@ -26,6 +26,9 @@ public class MySqlPool {
 		cfg.addDataSourceProperty("user", Config.USER);
 		cfg.addDataSourceProperty("password", Config.PASSWORD);
 		cfg.addDataSourceProperty("requireSSL", Config.ENABLE_SSL);
+		cfg.addDataSourceProperty("cachePrepStmts", "true");
+		cfg.addDataSourceProperty("prepStmtCacheSize", "250");
+		cfg.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 		cfg.setJdbcUrl("jdbc:mysql://" + Config.HOST + ":" + Config.PORT + "/" + Config.DATABASE);
 
 		ds = new HikariDataSource(cfg);
