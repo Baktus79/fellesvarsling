@@ -42,7 +42,8 @@ public class Config {
 	USER,
 	PASSWORD,
 	DATABASE,
-	SERVERNAME;
+	SERVERNAME,
+	SQLTYPE;
 
 	public static int
 	PORT,
@@ -64,6 +65,7 @@ public class Config {
 	private void onLoad() {
 
 		SERVERNAME = this.config.getString("servername");
+		SQLTYPE = this.config.getString("mysql.engine");
 		HOST = this.config.getString("mysql.host");
 		USER = this.config.getString("mysql.user");
 		PASSWORD = this.config.getString("mysql.password");

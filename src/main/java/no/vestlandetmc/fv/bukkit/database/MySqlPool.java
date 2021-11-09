@@ -20,16 +20,26 @@ public class MySqlPool {
 	}
 
 	public void initialize() {
+		if(Config.SQLTYPE.equalsIgnoreCase("mysql")) {
+			cfg.addDataSourceProperty("cachePrepStmts", "true");
+			cfg.addDataSourceProperty("prepStmtCacheSize", "250");
+			cfg.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+			cfg.setJdbcUrl("jdbc:mysql://" + Config.HOST + ":" + Config.PORT + "/" + Config.DATABASE);
+		}
+
+		else if(Config.SQLTYPE.equalsIgnoreCase("mariadb")) {
+			cfg.setJdbcUrl("jdbc:mariadb://" + Config.HOST + ":" + Config.PORT + "/" + Config.DATABASE);
+			cfg.setDataSourceClassName("org.mariadb.jdbc.MariaDbDataSource");
+		}
+
+		else { return; }
+
 		cfg.setMaximumPoolSize(Config.MAX_POOL);
 		cfg.setConnectionTimeout(Config.CON_TIMEOUT);
 		cfg.setMaxLifetime(Config.CON_LIFETIME);
 		cfg.addDataSourceProperty("user", Config.USER);
 		cfg.addDataSourceProperty("password", Config.PASSWORD);
 		cfg.addDataSourceProperty("requireSSL", Config.ENABLE_SSL);
-		cfg.addDataSourceProperty("cachePrepStmts", "true");
-		cfg.addDataSourceProperty("prepStmtCacheSize", "250");
-		cfg.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-		cfg.setJdbcUrl("jdbc:mysql://" + Config.HOST + ":" + Config.PORT + "/" + Config.DATABASE);
 
 		ds = new HikariDataSource(cfg);
 
