@@ -2,6 +2,7 @@ package no.vestlandetmc.fv.bungee.listeners;
 
 import java.sql.SQLException;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -20,7 +21,9 @@ public class PlayerListener implements Listener {
 		final UUID uuid = player.getUniqueId();
 		final MySQLHandler sql = new MySQLHandler();
 
-		ProxyServer.getInstance().getScheduler().runAsync(FVBungee.getInstance(), () -> {
+		ProxyServer.getInstance().getScheduler().schedule(FVBungee.getInstance(), () -> {
+			if(!player.isConnected()) { return; }
+
 			try {
 				if(sql.erVarslet(uuid)) {
 					MessageHandler.clickableAnnounce("&c" + player.getName() + " har varslinger. Klikk her for mer informasjon.", "/fellesvarsling lookup " + player.getName());
@@ -28,6 +31,6 @@ public class PlayerListener implements Listener {
 			} catch (final SQLException ex) {
 				ex.printStackTrace();
 			}
-		});
+		}, 1, TimeUnit.SECONDS);
 	}
 }

@@ -34,10 +34,9 @@ public class FVBukkit extends JavaPlugin {
 		Config.initialize();
 
 		MessageHandler.sendConsole("[" + getDescription().getPrefix() + "] Kontakter databasen...");
-		new MySqlPool().initialize();
 
 		try {
-			MySqlPool.getConnection();
+			new MySqlPool().initialize();
 			MessageHandler.sendConsole("[" + getDescription().getPrefix() + "] Kontakt med database er oppnådd");
 			this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 			MySQLHandler.sqlEnabled = true;
@@ -78,6 +77,22 @@ public class FVBukkit extends JavaPlugin {
 
 				MessageHandler.sendConsole("&6[" + getDescription().getPrefix() + "] &eBibliotek " + filename + " ble lastet ned...");
 			}
+		}
+	}
+
+	@Override
+	public void onDisable() {
+		try {
+			MessageHandler.sendConsole("[" + getDescription().getPrefix() + "] Stenger databasen...");
+
+			if(!MySqlPool.getDataSource().getConnection().isClosed()) {
+				MySqlPool.getDataSource().getConnection().close();
+			}
+
+			MessageHandler.sendConsole("[" + getDescription().getPrefix() + "] Kontakten til database er stengt...");
+
+		} catch (final SQLException e) {
+			e.printStackTrace();
 		}
 	}
 }

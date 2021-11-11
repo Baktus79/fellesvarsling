@@ -33,10 +33,9 @@ public class FVBungee extends Plugin {
 		this.getProxy().getPluginManager().registerListener(this, new PlayerListener());
 
 		getLogger().info("Kontakter databasen...");
-		new MySqlPool().initialize();
 
 		try {
-			MySqlPool.getConnection();
+			new MySqlPool().initialize();
 			getLogger().info("Kontakt med database er oppnådd");
 			MySQLHandler.sqlEnabled = true;
 		} catch (final SQLException e) {
@@ -68,6 +67,22 @@ public class FVBungee extends Plugin {
 
 				MessageHandler.sendConsole("&6[" + getDescription().getName() + "] &eBibliotek " + filename + " ble lastet ned...");
 			}
+		}
+	}
+
+	@Override
+	public void onDisable() {
+		try {
+			MessageHandler.sendConsole("[" + getDescription().getName() + "] Stenger databasen...");
+
+			if(!MySqlPool.getDataSource().getConnection().isClosed()) {
+				MySqlPool.getDataSource().getConnection().close();
+			}
+
+			MessageHandler.sendConsole("[" + getDescription().getName() + "] Kontakten til database er stengt...");
+
+		} catch (final SQLException e) {
+			e.printStackTrace();
 		}
 	}
 }

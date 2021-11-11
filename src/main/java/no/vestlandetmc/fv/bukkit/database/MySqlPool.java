@@ -13,23 +13,33 @@ public class MySqlPool {
 	private static HikariConfig cfg = new HikariConfig();
 	private static HikariDataSource ds;
 
-	public MySqlPool() {}
+	public MySqlPool() { }
 
-	public static Connection getConnection() throws SQLException {
-		return ds.getConnection();
+	public static HikariDataSource getDataSource() throws SQLException {
+		return ds;
 	}
 
-	public void initialize() {
+	public void initialize() throws SQLException {
 		if(Config.SQLTYPE.equalsIgnoreCase("mysql")) {
 			cfg.addDataSourceProperty("cachePrepStmts", "true");
 			cfg.addDataSourceProperty("prepStmtCacheSize", "250");
 			cfg.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+			cfg.addDataSourceProperty("useServerPrepStmts", "true");
+			cfg.addDataSourceProperty("useLocalSessionState", "true");
+			cfg.addDataSourceProperty("rewriteBatchedStatements", "true");
+			cfg.addDataSourceProperty("cacheResultSetMetadata", "true");
+			cfg.addDataSourceProperty("cacheServerConfiguration", "true");
+			cfg.addDataSourceProperty("elideSetAutoCommits", "true");
+			cfg.addDataSourceProperty("maintainTimeStats", "false");
+			cfg.addDataSourceProperty("requireSSL", Config.ENABLE_SSL);
 			cfg.setJdbcUrl("jdbc:mysql://" + Config.HOST + ":" + Config.PORT + "/" + Config.DATABASE);
 		}
 
 		else if(Config.SQLTYPE.equalsIgnoreCase("mariadb")) {
-			cfg.setJdbcUrl("jdbc:mariadb://" + Config.HOST + ":" + Config.PORT + "/" + Config.DATABASE);
 			cfg.setDataSourceClassName("org.mariadb.jdbc.MariaDbDataSource");
+			cfg.addDataSourceProperty("serverName", Config.HOST);
+			cfg.addDataSourceProperty("port", Config.PORT);
+			cfg.addDataSourceProperty("databaseName", Config.DATABASE);
 		}
 
 		else { return; }
@@ -39,7 +49,6 @@ public class MySqlPool {
 		cfg.setMaxLifetime(Config.CON_LIFETIME);
 		cfg.addDataSourceProperty("user", Config.USER);
 		cfg.addDataSourceProperty("password", Config.PASSWORD);
-		cfg.addDataSourceProperty("requireSSL", Config.ENABLE_SSL);
 
 		ds = new HikariDataSource(cfg);
 
@@ -53,12 +62,11 @@ public class MySqlPool {
 				+ "reason TEXT"
 				+ ")";
 
-		try {
-			Connection connection;
-			connection = getConnection();
-			connection.createStatement().execute(sql);
-		} catch (final SQLException e) {
-			e.printStackTrace();
-		}
+		Connection con;
+		con = getDataSource().getConnection();
+		con.createStatement().execute(sql);
+
+		if(con != null)
+			con.close();
 	}
 }
