@@ -1,4 +1,5 @@
 mysql:
+  engine: mariadb
   host: localhost
   port: 3306
   user: root
@@ -6,9 +7,9 @@ mysql:
   database: Minecraft
   enable-ssl: false
   pool:
-    max-pool-size: 5
-    connection-timeout: 10
-    max-lifetime: 900
+    max-pool-size: 10
+    connection-timeout: 25
+    max-lifetime: 1800
 servername: Vestlandet
 filter:
   blacklist: true

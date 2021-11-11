@@ -16,7 +16,8 @@ public class Config extends ConfigHandler {
 	USER,
 	PASSWORD,
 	DATABASE,
-	SERVERNAME;
+	SERVERNAME,
+	SQLTYPE;
 
 	public static int
 	PORT,
@@ -40,6 +41,7 @@ public class Config extends ConfigHandler {
 	private void onLoad() {
 
 		SERVERNAME = getString("servername");
+		SQLTYPE = getString("mysql.engine");
 		HOST = getString("mysql.host");
 		USER = getString("mysql.user");
 		PASSWORD = getString("mysql.password");

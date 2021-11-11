@@ -165,23 +165,24 @@ public class SubCommands {
 		if(!isConsole) { MessageHandler.sendMessage(player, message); }
 		else { MessageHandler.sendConsole(message); }
 
-		new MySqlPool().initialize();
-
 		try {
-			MySqlPool.getConnection();
-			if(!isConsole) { MessageHandler.sendMessage(player, sqlEnabled); }
-			else { MessageHandler.sendConsole(sqlEnabled); }
-
-			if(!isConsole) { MessageHandler.sendMessage(player, sqlSS); }
-			else { MessageHandler.sendConsole(sqlSS); }
-
-			MySQLHandler.sqlEnabled = true;
+			new MySqlPool().initialize();
 		} catch (final SQLException e) {
-			if(!isConsole) { MessageHandler.sendMessage(player, sqlDisable); }
-			else {
-				MySQLHandler.sqlEnabled = false;
-				MessageHandler.sendConsole(sqlDisable);
-			}
+			e.printStackTrace();
+		}
+
+		if(!isConsole) { MessageHandler.sendMessage(player, sqlEnabled); }
+		else { MessageHandler.sendConsole(sqlEnabled); }
+
+		if(!isConsole) { MessageHandler.sendMessage(player, sqlSS); }
+		else { MessageHandler.sendConsole(sqlSS); }
+
+		MySQLHandler.sqlEnabled = true;
+
+		if(!isConsole) { MessageHandler.sendMessage(player, sqlDisable); }
+		else {
+			MySQLHandler.sqlEnabled = false;
+			MessageHandler.sendConsole(sqlDisable);
 		}
 
 		if(!isConsole) { MessageHandler.sendMessage(player, litebans); }
