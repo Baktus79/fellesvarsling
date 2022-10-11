@@ -5,7 +5,7 @@
 
 	<groupId>no.vestlandetmc</groupId>
 	<artifactId>FellesVarsling</artifactId>
-	<version>1.0.6</version>
+	<version>1.0.7</version>
 	<packaging>jar</packaging>
 
 	<name>fv</name>
@@ -30,6 +30,10 @@
 			<id>bungeecord-repo</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</repository>
+		<repository>
+			<id>velocity</id>
+			<url>https://nexus.velocitypowered.com/repository/maven-public/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -42,7 +46,7 @@
 		<dependency>
 			<groupId>com.gitlab.ruany</groupId>
 			<artifactId>LiteBansAPI</artifactId>
-			<version>0.3.4</version>
+			<version>0.3.5</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -60,6 +64,12 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.velocitypowered</groupId>
+			<artifactId>velocity-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
 			<version>5.0.0</version>
@@ -74,6 +84,12 @@
 			<artifactId>mariadb-java-client</artifactId>
 			<version>2.7.4</version>
 		</dependency>
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+			<version>1.29</version>
+		</dependency>
+
 
 	</dependencies>
 

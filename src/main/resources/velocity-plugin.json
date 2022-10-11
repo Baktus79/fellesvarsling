@@ -1,0 +1,18 @@
+{
+    "id": "fellesvarsling",
+    "name": "FellesVarsling",
+    "version": "${project.version}",
+    "description": "Felles varslingssystem for Norske servere.",
+    "authors":
+    [
+        "Baktus_79"
+    ],
+    "dependencies":
+    [
+    	{ 
+    		"id": "Litebans", 
+    		"optional": true 
+    	}
+    ],
+    "main": "no.vestlandetmc.fv.velocity.FVVelocity"
+}
